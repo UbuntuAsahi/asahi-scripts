@@ -5,11 +5,10 @@ Subject: Add install-ubuntu target
 Refactor install-arch, move the systemd services, first-boot and update-grub to
 new install-boot target. Only install what is needed on Ubuntu.
 
-Last-Update: 2022-09-07
+Last-Update: 2023-06-18
 ---
- Makefile                   | 23 +++++++++++++++--------
- systemd/first-boot.service |  2 +-
- 2 files changed, 16 insertions(+), 9 deletions(-)
+ Makefile | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
 diff --git a/Makefile b/Makefile
 index fae421b..ad97590 100644
@@ -78,16 +77,3 @@ index fae421b..ad97590 100644
  	rm -f $(DESTDIR)$(PREFIX)/share/libalpm/hooks/95-m1n1-install.hook
  
  uninstall-fedora: uninstall-dracut
-diff --git a/systemd/first-boot.service b/systemd/first-boot.service
-index 485fd47..9ae9080 100644
---- a/systemd/first-boot.service
-+++ b/systemd/first-boot.service
-@@ -10,7 +10,7 @@ ConditionFirstBoot=yes
- [Service]
- Type=oneshot
- RemainAfterExit=yes
--ExecStart=/usr/bin/first-boot
-+ExecStart=/usr/sbin/first-boot
- 
- [Install]
- WantedBy=multi-user.target
