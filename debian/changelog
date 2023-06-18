@@ -1,3 +1,9 @@
+asahi-scripts (20221220-9) kinetic; urgency=medium
+
+  * Fix first-boot path in systemd service
+
+ -- Tobias Heider <me@tobhe.de>  Sun, 18 Jun 2023 22:25:40 +0200
+
 asahi-scripts (20221220-8) kinetic; urgency=medium
 
   * Fix permissions of /lib/firmware/vendor mount point
