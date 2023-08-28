@@ -1,10 +1,6 @@
 ubuntu-install.patch
 ubuntu-remove-pacman.patch
 ubuntu-fix-first-boot.patch
-ubuntu-bootloader-paths.patch
 ubuntu-kernel-hook.patch
-0007-Fixup-first-boot-for-Ubuntu.patch
-0008-Wait-a-bit-to-fix-bug-where-grub-probe-finds-the-old.patch
-0008-Add-initramfs-tools-implementation-for-cpio-firmware.patch
-0009-Remove-bashism.patch
-0010-Fix-update-grub-m1n1.-Run-as-bash-remove-non-existin.patch
+Ubuntu-initramfs-tools-cpio-firmware.patch
+ubuntu-update-grub-m1n1.patch

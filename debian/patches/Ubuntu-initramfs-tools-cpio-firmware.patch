@@ -1,6 +1,6 @@
 From: Tobias Heider <me@tobhe.de>
 Date: Sun, 30 Apr 2023 01:14:11 +0200
-Subject: Add initramfs-tools implementation for cpio firmware loading
+Subject: UBUNTU: Add initramfs-tools implementation for cpio firmware loading
 
 - Add initramfs hooks and boot scripts to extract and mount firmware
 - Add install-initramfs make target
@@ -23,10 +23,10 @@ Subject: Add initramfs-tools implementation for cpio firmware loading
  delete mode 100644 zz-update-m1n1
 
 diff --git a/Makefile b/Makefile
-index 75d727d..623d492 100644
+index 98a8342..d458838 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -44,16 +44,24 @@ install-dracut: install
+@@ -44,17 +44,25 @@ install-dracut: install
  	install -m0755 -t $(DESTDIR)$(DRACUT_MODULES_DIR)/99asahi-firmware dracut/modules.d/99asahi-firmware/load-asahi-firmware.sh
  	install -m0755 -t $(DESTDIR)$(DRACUT_MODULES_DIR)/99asahi-firmware dracut/modules.d/99asahi-firmware/module-setup.sh
  
@@ -46,7 +46,8 @@ index 75d727d..623d492 100644
  install-boot:
  	install -m0755 -t $(DESTDIR)$(BIN_DIR)/ $(BUILD_BOOT_SCRIPTS)
  	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system
- 	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system/{multi-user,sysinit}.target.wants
+ 	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system/multi-user.target.wants
+ 	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system/sysinit.target.wants
  	install -m0644 -t $(DESTDIR)$(PREFIX)/lib/systemd/system $(addprefix systemd/,$(UNITS))
 -	install -d $(DESTDIR)/etc/kernel/postinst.d/
 -	install -m0755 -t $(DESTDIR)/etc/kernel/postinst.d/ zz-update-m1n1
@@ -56,7 +57,7 @@ index 75d727d..623d492 100644
  	mkdir -p $(DESTDIR)$(PREFIX)/lib/systemd/system/multi-user.target.wants
  	ln -sf $(addprefix $(PREFIX)/lib/systemd/system/,$(MULTI_USER_WANTS)) \
  		$(DESTDIR)$(PREFIX)/lib/systemd/system/multi-user.target.wants/
-@@ -64,7 +72,7 @@ install-arch: install install-mkinitcpio install-boot
+@@ -65,7 +73,7 @@ install-arch: install install-mkinitcpio install-boot
  
  install-fedora: install install-dracut
  

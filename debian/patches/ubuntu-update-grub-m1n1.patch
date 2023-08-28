@@ -1,15 +1,17 @@
 From: Tobias Heider <me@tobhe.de>
-Date: Sun, 30 Apr 2023 01:48:38 +0200
-Subject: Fix update-grub/m1n1.
+Date: Sun, 12 Feb 2023 01:23:08 +0100
+Subject: UBUNTU: Adjust update-m1n1 paths for ubuntu.
 
 - Run as bash
 - generate grub env with grub-editenv
 - remove non-existing paths
 - fix path to dtbs.
+
+===================================================================
 ---
- update-grub | 9 ++-------
- update-m1n1 | 5 +++--
- 2 files changed, 5 insertions(+), 9 deletions(-)
+ update-grub |  9 ++-------
+ update-m1n1 | 10 +++++-----
+ 2 files changed, 7 insertions(+), 12 deletions(-)
 
 diff --git a/update-grub b/update-grub
 index 65421b7..dad7b6f 100755
@@ -40,7 +42,7 @@ index 65421b7..dad7b6f 100755
  [[ $MODULES != *$fs* ]] && MODULES="$MODULES $fs"
  echo "Core image modules: $MODULES"
 diff --git a/update-m1n1 b/update-m1n1
-index d5d8668..57db71e 100755
+index 512339a..75bbbe3 100755
 --- a/update-m1n1
 +++ b/update-m1n1
 @@ -1,4 +1,4 @@
@@ -49,15 +51,18 @@ index d5d8668..57db71e 100755
  # SPDX-License-Identifier: MIT
  
  set -e
-@@ -11,10 +11,11 @@ else
+@@ -13,11 +13,11 @@ else
      . /usr/share/asahi-scripts/functions.sh
  fi
  
+-: ${SOURCE:="/usr/lib/asahi-boot/"}
+-: ${M1N1:="$SOURCE/m1n1.bin"}
+-: ${U_BOOT:="$SOURCE/u-boot-nodtb.bin"}
 +KPATHS=(/lib/firmware/*/device-tree)
- : ${M1N1:="/usr/share/m1n1/m1n1.bin"}
- : ${U_BOOT:="/usr/share/u-boot-asahi/u-boot-nodtb.bin"}
++: ${M1N1:="/usr/share/m1n1/m1n1.bin"}
++: ${U_BOOT:="/usr/share/u-boot-asahi/u-boot-nodtb.bin"}
  : ${TARGET:="$1"}
--: ${DTBS:=/lib/firmware/*-asahi/device-tree/apple/*.dtb}
+-: ${DTBS:=/lib/modules/*-ARCH/dtbs/*.dtb}
 +: ${DTBS:="${KPATHS[-1]}/apple/*.dtb"}
  : ${CONFIG:=/etc/m1n1.conf}
  

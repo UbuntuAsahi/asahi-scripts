@@ -1,6 +1,6 @@
 From: Tobias Heider <me@tobhe.de>
 Date: Sun, 12 Feb 2023 01:23:08 +0100
-Subject: ubuntu-kernel-hook
+Subject: UBUNTU: Add update-m1n1 kernel hook
 
 ===================================================================
 ---
@@ -10,12 +10,12 @@ Subject: ubuntu-kernel-hook
  create mode 100644 zz-update-m1n1
 
 diff --git a/Makefile b/Makefile
-index ad97590..75d727d 100644
+index 2512813..98a8342 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -49,6 +49,11 @@ install-boot:
- 	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system
- 	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system/{multi-user,sysinit}.target.wants
+@@ -50,6 +50,11 @@ install-boot:
+ 	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system/multi-user.target.wants
+ 	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system/sysinit.target.wants
  	install -m0644 -t $(DESTDIR)$(PREFIX)/lib/systemd/system $(addprefix systemd/,$(UNITS))
 +	install -d $(DESTDIR)/etc/kernel/postinst.d/
 +	install -m0755 -t $(DESTDIR)/etc/kernel/postinst.d/ zz-update-m1n1
