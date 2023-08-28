@@ -1,0 +1,18 @@
+Source: asahi-scripts
+Section: misc
+Priority: optional
+Maintainer: Tobias Heider <me@tobhe.de>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Homepage: https://github.com/AsahiLinux/asahi-scripts
+Vcs-Browser: https://salsa.debian.org/bananas-team/asahi-scripts
+Vcs-Git: https://salsa.debian.org/bananas-team/asahi-scripts.git
+Rules-Requires-Root: no
+
+Package: asahi-scripts
+Architecture: arm64
+Multi-Arch: foreign
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Asahi Linux maintenance scripts
+ This package contains miscellaneous admin scripts from the Asahi Linux
+ reference distro.

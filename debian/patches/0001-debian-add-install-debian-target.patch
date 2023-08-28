@@ -1,0 +1,29 @@
+From: Tobias Heider <me@tobhe.de>
+Date: Sun, 12 Feb 2023 01:23:08 +0100
+Subject: debian: add install-debian target
+
+Refactor install-arch, move the systemd services, first-boot and update-grub to
+new install-boot target. Only install what is needed on Ubuntu.
+---
+ Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 72b016f..1ab3d1c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,4 @@
+-PREFIX=/usr/local
++PREFIX=/usr
+ SYS_PREFIX=$(PREFIX)
+ CONFIG_DIR=/etc/default
+ BIN_DIR=$(PREFIX)/bin
+@@ -56,6 +56,8 @@ install-arch: install install-mkinitcpio
+ 
+ install-fedora: install install-dracut
+ 
++install-debian: install
++
+ uninstall:
+ 	rm -f $(addprefix $(DESTDIR)$(BIN_DIR)/,$(SCRIPTS))
+ 	rm -rf $(DESTDIR)$(PREFIX)/share/asahi-scripts
