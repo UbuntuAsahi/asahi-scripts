@@ -1,3 +1,9 @@
+asahi-scripts (20230821-1) jammy; urgency=medium
+
+  * Rebase onto 20230821
+
+ -- Tobias Heider <me@tobhe.de>  Mon, 28 Aug 2023 18:28:47 +0200
+
 asahi-scripts (20221220-9) kinetic; urgency=medium
 
   * Fix first-boot path in systemd service
