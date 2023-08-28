@@ -161,6 +161,7 @@ diagnose() {
         cmd lsmod "Loaded modules"
         module_parameters
         cmd 'journalctl -b 0 -tkernel' "Kernel log"
+        cmd 'journalctl -b -1 -tkernel' "Kernel log (last boot)"
         logfile /var/log/Xorg.0.log
         logfile /var/log/pacman.log 500
     )
@@ -173,6 +174,11 @@ diagnose() {
         t8103:12.3*) ;;
         t600[012]:12.3*) ;;
         t8112:12.4*) ;;
+
+        t8103:13.5*) ;;
+        t600[012]:13.5*) ;;
+        t8112:13.5*) ;;
+        t602[012]:13.5*) ;;
         *)
             echo
             echo "** WARNING! **"
