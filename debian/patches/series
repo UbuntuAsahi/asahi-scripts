@@ -1,6 +1,5 @@
-ubuntu-install.patch
-ubuntu-remove-pacman.patch
-ubuntu-fix-first-boot.patch
-ubuntu-kernel-hook.patch
-Ubuntu-initramfs-tools-cpio-firmware.patch
-ubuntu-update-grub-m1n1.patch
+0001-debian-add-install-debian-target.patch
+0002-debian-Adjust-update-m1n1-paths-for-debian.patch
+0003-debian-Add-initramfs-tools-implementation-for-cpio-f.patch
+0004-UBUNTU-adjust-dtb-path-for-ubuntu.patch
+0005-UBUNTU-make-update-grub-work-on-ubuntu.patch

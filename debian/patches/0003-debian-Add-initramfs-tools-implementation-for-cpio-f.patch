@@ -1,32 +1,31 @@
 From: Tobias Heider <me@tobhe.de>
-Date: Sun, 30 Apr 2023 01:14:11 +0200
-Subject: UBUNTU: Add initramfs-tools implementation for cpio firmware loading
+Date: Sun, 12 Feb 2023 01:23:08 +0100
+Subject: debian: Add initramfs-tools implementation for cpio firmware loading
 
 - Add initramfs hooks and boot scripts to extract and mount firmware
+- Add update-m1n1 kernel hook
 - Add install-initramfs make target
 - busybox mount doesn't support PARTUUID= so use /dev/disk/by-partuuid
 ---
- Makefile                            | 20 ++++++++----
+ Makefile                            | 15 ++++++++-
  functions.sh                        |  4 +--
  initramfs/hooks/asahi               | 26 ++++++++++++++++
  initramfs/kernel/zz-update-m1n1     | 21 +++++++++++++
  initramfs/modules                   | 33 ++++++++++++++++++++
  initramfs/scripts/init-bottom/asahi | 19 ++++++++++++
  initramfs/scripts/init-top/asahi    | 61 +++++++++++++++++++++++++++++++++++++
- zz-update-m1n1                      | 21 -------------
- 8 files changed, 176 insertions(+), 29 deletions(-)
+ 7 files changed, 176 insertions(+), 3 deletions(-)
  create mode 100644 initramfs/hooks/asahi
  create mode 100644 initramfs/kernel/zz-update-m1n1
  create mode 100644 initramfs/modules
  create mode 100644 initramfs/scripts/init-bottom/asahi
  create mode 100644 initramfs/scripts/init-top/asahi
- delete mode 100644 zz-update-m1n1
 
 diff --git a/Makefile b/Makefile
-index 98a8342..d458838 100644
+index 1ab3d1c..34bb217 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -44,17 +44,25 @@ install-dracut: install
+@@ -44,6 +44,19 @@ install-dracut: install
  	install -m0755 -t $(DESTDIR)$(DRACUT_MODULES_DIR)/99asahi-firmware dracut/modules.d/99asahi-firmware/load-asahi-firmware.sh
  	install -m0755 -t $(DESTDIR)$(DRACUT_MODULES_DIR)/99asahi-firmware dracut/modules.d/99asahi-firmware/module-setup.sh
  
@@ -43,26 +42,15 @@ index 98a8342..d458838 100644
 +	install -m0755 -t $(DESTDIR)/etc/initramfs-tools/scripts/init-bottom initramfs/scripts/init-bottom/asahi
 +	install -m0644 -t $(DESTDIR)$(PREFIX)/share/asahi-scripts initramfs/modules
 +
- install-boot:
- 	install -m0755 -t $(DESTDIR)$(BIN_DIR)/ $(BUILD_BOOT_SCRIPTS)
+ install-arch: install install-mkinitcpio
+ 	install -m0755 -t $(DESTDIR)$(BIN_DIR)/ $(BUILD_ARCH_SCRIPTS)
  	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system
- 	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system/multi-user.target.wants
- 	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system/sysinit.target.wants
- 	install -m0644 -t $(DESTDIR)$(PREFIX)/lib/systemd/system $(addprefix systemd/,$(UNITS))
--	install -d $(DESTDIR)/etc/kernel/postinst.d/
--	install -m0755 -t $(DESTDIR)/etc/kernel/postinst.d/ zz-update-m1n1
--	install -d $(DESTDIR)/etc/kernel/postrm.d/
--	install -m0755 -t $(DESTDIR)/etc/kernel/postrm.d/ zz-update-m1n1
--
- 	mkdir -p $(DESTDIR)$(PREFIX)/lib/systemd/system/multi-user.target.wants
- 	ln -sf $(addprefix $(PREFIX)/lib/systemd/system/,$(MULTI_USER_WANTS)) \
- 		$(DESTDIR)$(PREFIX)/lib/systemd/system/multi-user.target.wants/
-@@ -65,7 +73,7 @@ install-arch: install install-mkinitcpio install-boot
+@@ -56,7 +69,7 @@ install-arch: install install-mkinitcpio
  
  install-fedora: install install-dracut
  
--install-ubuntu: install install-boot
-+install-ubuntu: install install-initramfs install-boot
+-install-debian: install
++install-debian: install install-initramfs
  
  uninstall:
  	rm -f $(addprefix $(DESTDIR)$(BIN_DIR)/,$(SCRIPTS))
@@ -188,11 +176,11 @@ index 0000000..19ac8ae
 +apple-rtkit-helper
 diff --git a/initramfs/scripts/init-bottom/asahi b/initramfs/scripts/init-bottom/asahi
 new file mode 100644
-index 0000000..4cef58e
+index 0000000..c198e8b
 --- /dev/null
 +++ b/initramfs/scripts/init-bottom/asahi
 @@ -0,0 +1,19 @@
-+#!/usr/bin/sh
++#!/bin/sh
 +
 +PREREQ=""
 +prereqs()
@@ -213,11 +201,11 @@ index 0000000..4cef58e
 +cp -r /vendorfw/* /vendorfw/.vendorfw.manifest "${rootmnt}"/lib/firmware/vendor
 diff --git a/initramfs/scripts/init-top/asahi b/initramfs/scripts/init-top/asahi
 new file mode 100644
-index 0000000..abf77b1
+index 0000000..79d0af4
 --- /dev/null
 +++ b/initramfs/scripts/init-top/asahi
 @@ -0,0 +1,61 @@
-+#!/usr/bin/sh
++#!/bin/sh
 +
 +PREREQ="udev"
 +prereqs()
@@ -278,30 +266,3 @@ index 0000000..abf77b1
 +umount /run/.system-efi
 +
 +log_success_msg "Asahi: Vendor firmware unpacked successfully"
-diff --git a/zz-update-m1n1 b/zz-update-m1n1
-deleted file mode 100644
-index 1cdac6a..0000000
---- a/zz-update-m1n1
-+++ /dev/null
-@@ -1,21 +0,0 @@
--#! /bin/sh
--set -e
--
--which update-m1n1 >/dev/null 2>&1 || exit 0
--
--set -- $DEB_MAINT_PARAMS
--mode="${1#\'}"
--mode="${mode%\'}"
--case $0:$mode in
--    # Only run on postinst configure and postrm remove, to avoid wasting
--    # time by calling update-grub multiple times on upgrade and removal.
--    # Also run if we have no DEB_MAINT_PARAMS, in order to work with old
--    # kernel packages.
--    */postinst.d/*:|*/postinst.d/*:configure|*/postrm.d/*:|*/postrm.d/*:remove)
--	if [ -e /boot/efi/m1n1/boot.bin ]; then
--		exec update-m1n1
--	fi
--	;;
--esac
--
--exit 0

@@ -1,0 +1,36 @@
+From: Tobias Heider <me@tobhe.de>
+Date: Tue, 29 Aug 2023 02:07:39 +0200
+Subject: UBUNTU: make update-grub work on ubuntu
+
+---
+ update-grub | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/update-grub b/update-grub
+index 65421b7..dad7b6f 100755
+--- a/update-grub
++++ b/update-grub
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ # SPDX-License-Identifier: MIT
+ 
+ set -e
+@@ -50,16 +50,11 @@ EOF
+ echo "Installing GRUB files..."
+ mkdir -p "$GRUB_DIR"
+ touch "$GRUB_DIR"/device.map
+-dd if=/dev/zero of="$GRUB_DIR"/grubenv bs=1024 count=1 2>/dev/null
+-cp -r /usr/share/grub/themes "$GRUB_DIR"
++grub-editenv "$GRUB_DIR"/grubenv create
+ cp -r /usr/lib/grub/arm64-efi "$GRUB_DIR"
+ rm -f "$GRUB_DIR"/arm64-efi/*.module
+ mkdir -p "$GRUB_DIR"/{fonts,locale}
+ cp /usr/share/grub/unicode.pf2 "$GRUB_DIR"/fonts
+-for i in /usr/share/locale/*/LC_MESSAGES/grub.mo; do
+-    lc="$(echo "$i" | cut -d/ -f5)"
+-    cp "$i" "$GRUB_DIR"/locale/"$lc".mo
+-done
+ 
+ [[ $MODULES != *$fs* ]] && MODULES="$MODULES $fs"
+ echo "Core image modules: $MODULES"
