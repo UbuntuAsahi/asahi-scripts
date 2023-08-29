@@ -1,3 +1,10 @@
+asahi-scripts (20230821-1ubuntu2) jammy; urgency=medium
+
+  * Rebase patches onto debian package
+  * Update install target to install-debian
+
+ -- Tobias Heider <me@tobhe.de>  Tue, 29 Aug 2023 02:11:42 +0200
+
 asahi-scripts (20230821-1) jammy; urgency=medium
 
   * Rebase onto 20230821
