@@ -1,3 +1,10 @@
+asahi-scripts (20230821-1ubuntu3) jammy; urgency=medium
+
+  * Sync with debian
+  * Fix update-grub installation
+
+ -- Tobias Heider <me@tobhe.de>  Wed, 30 Aug 2023 21:36:43 +0200
+
 asahi-scripts (20230821-1ubuntu2) jammy; urgency=medium
 
   * Rebase patches onto debian package
