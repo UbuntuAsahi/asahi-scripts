@@ -3,9 +3,25 @@ Date: Tue, 29 Aug 2023 02:07:39 +0200
 Subject: UBUNTU: make update-grub work on ubuntu
 
 ---
+ Makefile    | 4 ++--
  update-grub | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index 34bb217..bcc199a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,8 +2,8 @@ PREFIX=/usr
+ SYS_PREFIX=$(PREFIX)
+ CONFIG_DIR=/etc/default
+ BIN_DIR=$(PREFIX)/bin
+-SCRIPTS=asahi-diagnose asahi-fwupdate update-m1n1
+-ARCH_SCRIPTS=update-grub first-boot
++SCRIPTS=asahi-diagnose asahi-fwupdate update-grub update-m1n1
++ARCH_SCRIPTS=first-boot
+ UNITS=first-boot.service
+ MULTI_USER_WANTS=first-boot.service
+ DRACUT_CONF_DIR=$(PREFIX)/lib/dracut/dracut.conf.d
 diff --git a/update-grub b/update-grub
 index 65421b7..dad7b6f 100755
 --- a/update-grub

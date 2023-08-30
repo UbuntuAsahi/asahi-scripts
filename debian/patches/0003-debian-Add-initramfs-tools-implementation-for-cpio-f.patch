@@ -9,12 +9,12 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
 ---
  Makefile                            | 15 ++++++++-
  functions.sh                        |  4 +--
- initramfs/hooks/asahi               | 26 ++++++++++++++++
+ initramfs/hooks/asahi               | 35 +++++++++++++++++++++
  initramfs/kernel/zz-update-m1n1     | 21 +++++++++++++
  initramfs/modules                   | 33 ++++++++++++++++++++
  initramfs/scripts/init-bottom/asahi | 19 ++++++++++++
  initramfs/scripts/init-top/asahi    | 61 +++++++++++++++++++++++++++++++++++++
- 7 files changed, 176 insertions(+), 3 deletions(-)
+ 7 files changed, 185 insertions(+), 3 deletions(-)
  create mode 100644 initramfs/hooks/asahi
  create mode 100644 initramfs/kernel/zz-update-m1n1
  create mode 100644 initramfs/modules
@@ -55,7 +55,7 @@ index 1ab3d1c..34bb217 100644
  uninstall:
  	rm -f $(addprefix $(DESTDIR)$(BIN_DIR)/,$(SCRIPTS))
 diff --git a/functions.sh b/functions.sh
-index df3a6ea..1f5f350 100644
+index df3a6ea..08ce2c7 100644
 --- a/functions.sh
 +++ b/functions.sh
 @@ -43,7 +43,7 @@ mount_sys_esp() {
@@ -63,7 +63,7 @@ index df3a6ea..1f5f350 100644
          warn "System ESP not identified in device tree, using $bootmnt"
      else
 -        mount "PARTUUID=$esp_uuid" "$mountpoint"
-+        mount "/dev/disk/by-partuuid/$esp_uuid" "$mountpoint"
++        mount -t vfat "/dev/disk/by-partuuid/$esp_uuid" "$mountpoint"
      fi
      dev="$(grep "$mountpoint" /proc/mounts | cut -d" " -f1)"
      info "Mounted System ESP $dev at $mountpoint"
@@ -72,16 +72,16 @@ index df3a6ea..1f5f350 100644
          fi
  
 -        mount "PARTUUID=$esp_uuid" "$mountpoint"
-+        mount "/dev/disk/by-partuuid/$esp_uuid" "$mountpoint"
++        mount -t vfat "/dev/disk/by-partuuid/$esp_uuid" "$mountpoint"
      fi
      info "Mounted Boot ESP at $mountpoint"
  }
 diff --git a/initramfs/hooks/asahi b/initramfs/hooks/asahi
 new file mode 100644
-index 0000000..137f403
+index 0000000..93df811
 --- /dev/null
 +++ b/initramfs/hooks/asahi
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,35 @@
 +#!/bin/sh
 +
 +PREREQ=""
@@ -105,7 +105,16 @@ index 0000000..137f403
 +mkdir -p "${DESTDIR}/lib/firmware"
 +mkdir -p "${DESTDIR}/usr/share/asahi-scripts"
 +cp -r /usr/share/asahi-scripts/* "${DESTDIR}/usr/share/asahi-scripts"
++
++# Debian
++copy_exec /usr/bin/seq
++copy_exec /usr/bin/sed
++copy_exec /usr/bin/grep
++copy_exec /usr/bin/cp
 +copy_exec /usr/bin/cpio
++manual_add_modules vfat
++manual_add_modules nls_ascii
++manual_add_modules nls_cp437
 +
 +add_modules_from_file /usr/share/asahi-scripts/modules
 diff --git a/initramfs/kernel/zz-update-m1n1 b/initramfs/kernel/zz-update-m1n1
