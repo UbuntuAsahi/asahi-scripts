@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+# Undo previous divert
+dpkg-divert --package asahi-scripts --rename --remove /usr/sbin/update-grub
+
+#DEBHELPER#
