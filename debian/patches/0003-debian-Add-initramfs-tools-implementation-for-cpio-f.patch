@@ -10,11 +10,11 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
  Makefile                            | 15 ++++++++-
  functions.sh                        |  4 +--
  initramfs/hooks/asahi               | 35 +++++++++++++++++++++
- initramfs/kernel/zz-update-m1n1     | 21 +++++++++++++
+ initramfs/kernel/zz-update-m1n1     | 26 ++++++++++++++++
  initramfs/modules                   | 33 ++++++++++++++++++++
  initramfs/scripts/init-bottom/asahi | 19 ++++++++++++
  initramfs/scripts/init-top/asahi    | 61 +++++++++++++++++++++++++++++++++++++
- 7 files changed, 185 insertions(+), 3 deletions(-)
+ 7 files changed, 190 insertions(+), 3 deletions(-)
  create mode 100644 initramfs/hooks/asahi
  create mode 100644 initramfs/kernel/zz-update-m1n1
  create mode 100644 initramfs/modules
@@ -119,14 +119,19 @@ index 0000000..93df811
 +add_modules_from_file /usr/share/asahi-scripts/modules
 diff --git a/initramfs/kernel/zz-update-m1n1 b/initramfs/kernel/zz-update-m1n1
 new file mode 100644
-index 0000000..1cdac6a
+index 0000000..f5853c3
 --- /dev/null
 +++ b/initramfs/kernel/zz-update-m1n1
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,26 @@
 +#! /bin/sh
 +set -e
 +
 +which update-m1n1 >/dev/null 2>&1 || exit 0
++
++if [ ! -e /usr/lib/m1n1/m1n1.bin ] && [ -e /usr/lib/m1n1/boot.bin ]; then
++	# looks like glanzmanns m1n1 package, not debians.
++	exit 0
++fi
 +
 +set -- $DEB_MAINT_PARAMS
 +mode="${1#\'}"
