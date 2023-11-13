@@ -1,5 +1,5 @@
-asahi-scripts (20230821-1) unstable; urgency=medium
+asahi-scripts (20230821-1) experimental; urgency=medium
 
   * Initial release. (Closes: #1050810)
 
- -- Tobias Heider <me@tobhe.de>  Sat, 14 Oct 2023 15:45:22 +0200
+ -- Tobias Heider <me@tobhe.de>  Tue, 14 Nov 2023 14:25:32 +0100
