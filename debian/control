@@ -1,5 +1,5 @@
 Source: asahi-scripts
-Section: misc
+Section: admin
 Priority: optional
 Maintainer: Tobias Heider <me@tobhe.de>
 Build-Depends: debhelper-compat (= 13)
