@@ -3,11 +3,11 @@ Date: Sun, 12 Feb 2023 01:23:08 +0100
 Subject: debian: Adjust update-m1n1 paths for debian.
 
 ---
- update-m1n1 | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ update-m1n1 | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/update-m1n1 b/update-m1n1
-index 512339a..e554b0d 100755
+index 0e55ead..ea13945 100755
 --- a/update-m1n1
 +++ b/update-m1n1
 @@ -1,4 +1,4 @@
@@ -16,19 +16,18 @@ index 512339a..e554b0d 100755
  # SPDX-License-Identifier: MIT
  
  set -e
-@@ -13,11 +13,11 @@ else
+@@ -13,11 +13,10 @@ else
      . /usr/share/asahi-scripts/functions.sh
  fi
  
 -: ${SOURCE:="/usr/lib/asahi-boot/"}
 -: ${M1N1:="$SOURCE/m1n1.bin"}
 -: ${U_BOOT:="$SOURCE/u-boot-nodtb.bin"}
-+KPATHS=(/usr/lib/linux-image-*-asahi-*/)
 +: ${M1N1:="/usr/lib/m1n1/m1n1.bin"}
 +: ${U_BOOT:="/usr/lib/u-boot-asahi/u-boot-nodtb.bin"}
  : ${TARGET:="$1"}
--: ${DTBS:=/lib/modules/*-ARCH/dtbs/*.dtb}
-+: ${DTBS:="${KPATHS[-1]}/apple/*.dtb"}
+-: ${DTBS:=$(/bin/ls -d /lib/modules/*-ARCH | sort -rV | head -1)/dtbs/*.dtb}
++: ${DTBS:=$(/bin/ls -d /usr/lib/linux-image-*asahi*/apple | sort -rV | head -1)/*.dtb}
  : ${CONFIG:=/etc/m1n1.conf}
  
  umount=false

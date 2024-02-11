@@ -59,10 +59,77 @@ EOF
 system_info() {
     cat <<EOF
 ## System information
+    Distro:         $(awk -F= '/PRETTY_NAME/ { gsub(/"/, "", $2); print $2 }' /etc/os-release)
     Kernel:         $(uname -r)
     Kernel build:   $(uname -v)
     Uptime:         $(uptime)
     Kernel cmdline: $(cat /proc/cmdline)
+
+EOF
+}
+
+
+# Check pipewire profile
+check_macaudio_profile() {
+    local profile_config="${HOME}/.local/state/wireplumber/default-profile"
+    [ -e  ${profile_config} ] \
+    && grep alsa_card.platform-sound ${profile_config} | sed -e 's/.*=//' \
+    || echo "none"
+}
+macaudio_profile=$(check_macaudio_profile)
+
+# Check for the Pro Audio profile (installed before early 2023)
+check_proaudio() {
+    grep "alsa_output.platform-sound.pro-output.." "${HOME}/.local/state/wireplumber/restore-stream" > /dev/null \
+    && echo "yes" \
+    || echo "no"
+}
+pro_audio=$(check_proaudio)
+
+# Check for Configs in /etc/ (installed before mid 2023)
+check_audio_oldconfs() {
+    [ -e /etc/pipewire/pipewire.conf.d/*asahi* ] \
+    || [ -e /etc/wireplumber/policy.lua.d/99-asahi-policy.lua ] \
+    && echo "yes" \
+    || echo "no"
+}
+old_conf=$(check_audio_oldconfs)
+
+# Check for the racy 99-asahi* build (installed before ~Oct 2023)
+check_audio_oldbuild() {
+    [ -e /usr/share/wireplumber/policy.lua.d/99-asahi-policy.lua ] \
+    && echo "yes" \
+    || echo "no"
+}
+racy_build=$(check_audio_oldbuild)
+
+# Check if snd-soc-macaudio.please_blow_up_my_speakers was requested
+check_audio_macaudio() {
+    grep "0" /sys/module/snd_soc_macaudio/parameters/please_blow_up_my_speakers > /dev/null \
+    && echo "no" \
+    || echo "yes"
+}
+bad_macaudio_params=$(check_audio_macaudio)
+
+# Check that snd-soc-tas2764.apple_quirks=0x3f is being applied
+check_audio_tas2764() {
+    [ -e /sys/module/snd_soc_tas2764/ ] && (
+        grep "63" /sys/module/snd_soc_tas2764/parameters/apple_quirks > /dev/null \
+        && echo "yes" \
+        || echo "no"
+    ) || echo "N/A"
+}
+tas2764_quirks=$(check_audio_tas2764)
+
+audio_config() {
+    cat <<EOF
+## Audio Configuration:
+    Default profile: $macaudio_profile
+    Pro Audio profile detected: $pro_audio
+    Old configuration files in \`/etc/\`: $old_conf
+    File conflicts in \`/usr/share/\`: $racy_build
+    Speaker detonation requested: $bad_macaudio_params
+    TAS2764 quirks applied: $tas2764_quirks
 
 EOF
 }
@@ -89,15 +156,26 @@ EOF
 
 
 package_versions() {
+    echo "## Package versions"
+    if [ -e /etc/arch-release ]; then
+      cmd="pacman -Q"
+      pkgs="m1n1 uboot-asahi asahi-scripts asahi-meta asahi-desktop-meta
+            asahi-fwextract asahi-configs alsa-ucm-conf-asahi
+            asahilinux-keyring linux linux-asahi linux-asahi-edge
+            mesa xorg-server pipewire kwin mutter"
+    elif [ -e /etc/fedora-release ]; then
+      cmd="rpm -q"
+      pkgs="m1n1 alsa-ucm-asahi asahi-platform-metapackage asahi-repos
+            fedora-asahi-remix-scripts tiny-dfr uboot-images-armv8 kernel-16k
+            kernel-16k-modules-extra asahi-fwextract dracut-asahi update-m1n1
+            asahi-audio speakersafetyd wireplumber pipewire mesa"
+    else
+      echo "Distribution not supported"
+      return
+    fi
     cat <<EOF
-## Package versions
 \`\`\`
-$(pacman -Q \
-    m1n1 uboot-asahi asahi-scripts asahi-meta asahi-desktop-meta \
-    asahi-fwextract asahi-configs alsa-ucm-conf-asahi \
-    asahilinux-keyring linux linux-asahi linux-asahi-edge \
-    mesa xorg-server pipewire kwin mutter \
-    2>/dev/null | uniq)
+$($cmd $pkgs 2>/dev/null | sort -u)
 \`\`\`
 
 EOF
@@ -152,9 +230,10 @@ diagnose() {
         firmware_versions
         boot_config
         system_info
+        audio_config
         environment
         getfile /proc/mounts "Mounts"
-        [ -e /etc/arch-release ] && package_versions
+        package_versions
         cmd lsblk "Block devices"
         cmd lspci "PCI devices"
         getfile /proc/bus/input/devices "Input devices"
@@ -167,6 +246,35 @@ diagnose() {
     )
 
     log "Saved diagnostic information to $f"
+
+    if [ "$macaudio_profile" != "HiFi" ]; then
+        echo
+        echo "Pipewire macaudio profile is \"${macaudio_profile}\"."
+        echo "Headphones and speakers will not work. Select the \"Default\" or \"HiFi\" profile."
+    fi
+
+    if [ "$pro_audio" == "yes" ] || \
+       [ "$old_conf" == "yes" ] || \
+       [ "$racy_build" == "yes" ] || \
+       [ "$bad_macaudio_params" == "yes" ] || \
+       [ "$tas2764_quirks" == "no" ]; then
+        echo
+        echo "!! IMPORTANT !!"
+        echo "Your audio configuration is in an invalid state. It is likely that you tried to"
+        echo "enable speakers early, despite numerous and very explicit warnings not to do so."
+        echo "Potential reason(s) you are seeing this message: "
+        (
+            [ "$pro_audio" == "yes" ] && echo "    - The Pro Audio profile is/was enabled for the internal speakers."
+            [ "$old_conf" == "yes" ] && echo "    - You have files in /etc/ from a prerelease version of asahi-audio."
+            [ "$racy_build" == "yes" ] && echo "    - You have files in /usr/share/ from a prerelease version of asahi-audio."
+            [ "$bad_macaudio_params" == "yes" ] && echo "    - You have tried to manually circumvent our kernel-level safety controls."
+            [ "$tas2764_quirks" == "no" ] && echo "    - Required speaker codec settings are not being applied."
+        )
+        echo "Please go to https://github.com/AsahiLinux/docs/wiki/Undoing-early-speaker-support-hacks for fixes."
+        echo "Do NOT file audio-related bugs until you have tried ALL fixes suggested at the page above."
+        echo "Your bugs will be ignored and you will not be assisted."
+    fi
+
 
     plat="$(cat /proc/device-tree/compatible | sed -re 's/.*apple,(t....).*/\1/g')"
     ver="$(tr -d '\0' </proc/device-tree/chosen/asahi,os-fw-version)"
@@ -189,6 +297,34 @@ diagnose() {
             echo "Reinstall without using expert mode if you want support."
             ;;
     esac
+
+    if [ -e /etc/fedora-release ]; then
+        if uname -r | grep -qv '+16k$'; then
+            echo
+            echo "** WARNING! **"
+            echo "Your system is not running a 16k page kernel. This is unsupported and will not"
+            echo "work properly; see https://discussion.fedoraproject.org/t/87711 for how to fix."
+        elif [ ! -e /etc/sysconfig/kernel ]; then
+            echo
+            echo "** WARNING! **"
+            echo "/etc/sysconfig/kernel is missing, kernel updates may not install properly"
+            echo "See https://discussion.fedoraproject.org/t/87711/3 for how to fix."
+        elif grep -q DEFAULTKERNEL=kernel-core /etc/sysconfig/kernel; then
+            echo
+            echo "** WARNING! **"
+            echo "/etc/sysconfig/kernel is setting a 4k kernel as default; this is unsupported"
+            echo "and will not work properly; see https://discussion.fedoraproject.org/t/87711"
+            echo "for how to fix."
+        fi
+
+        if ! rpm -q asahi-platform-metapackage > /dev/null 2>&1; then
+            echo
+            echo "** WARNING! **"
+            echo "The asahi-platform-metapackage package is not installed, you may be missing"
+            echo "required platform dependencies. See https://discussion.fedoraproject.org/t/95301"
+            echo "for how to fix it."
+        fi
+    fi
 }
 
 if [ -z "$1" ]; then

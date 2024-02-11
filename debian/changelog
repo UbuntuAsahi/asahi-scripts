@@ -1,229 +1,29 @@
-asahi-scripts (20230821-1ubuntu5) jammy; urgency=medium
+asahi-scripts (20231219.1-1) unstable; urgency=medium
 
-  * UBUNTU: Drop update-grub
-  * UBUNTU: undo previous diversion of update-grub
+  * New upstream release 20231219.1
+  * Rebase patches onto 20231219.1
+    - update-m1n1: adopt upstream approach for multiple kernels
+    - update-m1n1: make dtb glob more permissive for alternative names
+    - initramfs: explicitly load xhci-plat-hcd
 
- -- Tobias Heider <me@tobhe.de>  Mon, 16 Oct 2023 21:29:55 +0200
+ -- Tobias Heider <me@tobhe.de>  Sun, 11 Feb 2024 01:35:07 +0100
 
-asahi-scripts (20230821-1ubuntu3) jammy; urgency=medium
+asahi-scripts (20230821-3) unstable; urgency=medium
 
-  * Sync with debian
-  * Fix update-grub installation
+  * Team upload.
+  * Use debian u-boot apple_m1 path in update-m1n1
 
- -- Tobias Heider <me@tobhe.de>  Wed, 30 Aug 2023 21:36:43 +0200
+ -- Andreas Henriksson <andreas@fatal.se>  Sun, 28 Jan 2024 18:52:41 +0100
 
-asahi-scripts (20230821-1ubuntu2) jammy; urgency=medium
+asahi-scripts (20230821-2) unstable; urgency=medium
 
-  * Rebase patches onto debian package
-  * Update install target to install-debian
+  * Team upload.
+  * Upload to unstable.
 
- -- Tobias Heider <me@tobhe.de>  Tue, 29 Aug 2023 02:11:42 +0200
+ -- Andreas Henriksson <andreas@fatal.se>  Mon, 20 Nov 2023 09:02:38 +0100
 
-asahi-scripts (20230821-1) jammy; urgency=medium
+asahi-scripts (20230821-1) experimental; urgency=medium
 
-  * Rebase onto 20230821
+  * Initial release. (Closes: #1050810)
 
- -- Tobias Heider <me@tobhe.de>  Mon, 28 Aug 2023 18:28:47 +0200
-
-asahi-scripts (20221220-9) kinetic; urgency=medium
-
-  * Fix first-boot path in systemd service
-
- -- Tobias Heider <me@tobhe.de>  Sun, 18 Jun 2023 22:25:40 +0200
-
-asahi-scripts (20221220-8) kinetic; urgency=medium
-
-  * Fix permissions of /lib/firmware/vendor mount point
-
- -- Tobias Heider <me@tobhe.de>  Mon, 15 May 2023 17:10:27 +0200
-
-asahi-scripts (20221220-7) kinetic; urgency=medium
-
-  * Sync initramfs scripts with initcpio
-
- -- Tobias Heider <me@tobhe.de>  Mon, 15 May 2023 15:57:13 +0200
-
-asahi-scripts (20221220-6) kinetic; urgency=medium
-
-  * Create initial grub env with grub-editenv
-
- -- Tobias Heider <me@tobhe.de>  Wed, 10 May 2023 21:11:03 +0200
-
-asahi-scripts (20221220-5) kinetic; urgency=medium
-
-  * Install initramfs/modules in install-initramfs
-  * Update initramfs on update
-
- -- Tobias Heider <me@tobhe.de>  Sun, 30 Apr 2023 02:21:33 +0200
-
-asahi-scripts (20221220-4) kinetic; urgency=medium
-
-  * Fix update-grub. Run as bash, remove non-existing paths.
-
- -- Tobias Heider <me@tobhe.de>  Sun, 30 Apr 2023 01:49:15 +0200
-
-asahi-scripts (20221220-3) kinetic; urgency=medium
-
-  * Implement firmware loading via firmware.cpio
-
- -- Tobias Heider <me@tobhe.de>  Sun, 30 Apr 2023 01:18:51 +0200
-
-asahi-scripts (20221220-2) kinetic; urgency=medium
-
-  * Use override_dh_auto_install to call install-ubuntu target
-
- -- Tobias Heider <me@tobhe.de>  Sat, 29 Apr 2023 21:44:39 +0200
-
-asahi-scripts (20221220-1) kinetic; urgency=medium
-
-  * Rebase onto 20221220
-
- -- Tobias Heider <me@tobhe.de>  Sat, 29 Apr 2023 21:14:25 +0200
-
-asahi-scripts (20220821-17+lunar8) lunar; urgency=medium
-
-  * Increase sleep time. grub-probe is still unreliable.
-
- -- Tobias Heider <tobias.heider@canonical.com>  Sun, 23 Apr 2023 18:33:20 +0200
-
-asahi-scripts (20220821-17+lunar7) lunar; urgency=medium
-
-  * Add sleep in first boot to help grub-probe find the correct UUID
-
- -- Tobias Heider <me@tobhe.de>  Wed, 19 Apr 2023 14:55:51 +0200
-
-asahi-scripts (20220821-17+lunar6) lunar; urgency=medium
-
-  * Add udev barriers to fix more races in first-boot.
-
- -- Tobias Heider <me@tobhe.de>  Sun, 16 Apr 2023 22:48:42 +0200
-
-asahi-scripts (20220821-17+lunar4) lunar; urgency=medium
-
-  * Pass root_uuid directly to update-grub to prevent a race
-    on first-boot where update-grub sometimes selects the old uuid.
-
- -- Tobias Heider <me@tobhe.de>  Tue, 04 Apr 2023 16:59:40 +0200
-
-asahi-scripts (20220821-17+lunar3) lunar; urgency=medium
-
-  * Fixup first-boot service for lunar
-
- -- Tobias Heider <me@tobhe.de>  Tue, 04 Apr 2023 02:54:14 +0200
-
-asahi-scripts (20220821-17+lunar1) lunar; urgency=medium
-
-  * Add fixes to deal with systemd unmounting shenanigans.
-
- -- Tobias Heider <me@tobhe.de>  Fri, 31 Mar 2023 02:33:33 +0200
-
-asahi-scripts (20220821-17+lunar0) lunar; urgency=medium
-
-  * Remove workaround for missing systemd-firstboot.service which
-    is included with lunar
-
- -- Tobias Heider <me@tobhe.de>  Thu, 30 Mar 2023 03:06:05 +0200
-
-asahi-scripts (20220821-17) jammy; urgency=medium
-
-  * Move to gbp, add kernel postrm hook
-
- -- Tobias Heider <me@tobhe.de>  Sun, 12 Feb 2023 01:37:14 +0100
-
-asahi-scripts (20220821-16) jammy; urgency=medium
-
-  * d/p/ubuntu-kernel-hook.patch: Add kernel postinst hook to
-    update m1n1
-
- -- Tobias Heider <me@tobhe.de>  Thu, 17 Nov 2022 11:40:20 +0100
-
-asahi-scripts (20220821-15) jammy; urgency=medium
-
-  * d/p/ubuntu-newest-dtbs.patch: Only include device trees from
-    newest kernel in bootloader blob
-
- -- Tobias Heider <me@tobhe.de>  Mon, 31 Oct 2022 14:30:30 +0100
-
-asahi-scripts (20220821-14) jammy; urgency=medium
-
-  * Include update-m1n1 with distro specific changes
-    - Fix firmware, m1n1 and u-boot paths in update-m1n1
-    - Install update-m1n1
-
- -- Tobias Heider <me@tobhe.de>  Fri, 23 Sep 2022 01:29:58 +0200
-
-asahi-scripts (20220821-13) jammy; urgency=medium
-
-  * Add back grub-probe hack in first-boot. The underlying bug
-    still persists.
-
- -- Tobias Heider <me@tobhe.de>  Sun, 11 Sep 2022 17:07:36 +0200
-
-asahi-scripts (20220821-11) jammy; urgency=medium
-
-  * Install systemd want targets
-  * d/p/ubuntu-fix-update-vendor-firmware: Fix wrong shebang bug
-    in update-vendor-firmware.
-
- -- Tobias Heider <me@tobhe.de>  Sat, 10 Sep 2022 22:09:50 +0000
-
-asahi-scripts (20220821-10) jammy; urgency=medium
-
-  * Install update-vendor-firmware and systemd service
-
- -- Tobias Heider <me@tobhe.de>  Sat, 10 Sep 2022 23:51:00 +0200
-
-asahi-scripts (20220821-9) jammy; urgency=medium
-
-  * Fix d/control copy-paste errors
-
- -- Tobias Heider <me@tobhe.de>  Sat, 10 Sep 2022 21:29:38 +0200
-
-asahi-scripts (20220821-8) jammy; urgency=medium
-
-  * Fix divert conflict. This seems to not work well with symlinks
-    so simply install to sbin.
-
- -- Tobias Heider <me@tobhe.de>  Fri, 09 Sep 2022 22:06:28 +0000
-
-asahi-scripts (20220821-7) jammy; urgency=medium
-
-  * d/p/ubuntu-install.patch: Install early udev systemd unit
-
- -- Tobias Heider <me@tobhe.de>  Fri, 09 Sep 2022 15:00:34 +0000
-
-asahi-scripts (20220821-6) jammy; urgency=medium
-
-  * d/p/ubuntu-fix-first-boot.patch:
-    - Fix bug with update-grub on first boot. grub-probe for some reason
-      looks for a device matching the old UUID, /dev/disk/* already lists
-      the new ones so trick grub by linking new->old
-    - Ubuntu won't auto-generate /etc/machine-id if it is missing, so do
-      it here.
-
- -- Tobias Heider <me@tobhe.de>  Thu, 08 Sep 2022 15:21:03 +0200
-
-asahi-scripts (20220821-3) jammy; urgency=medium
-
-  * Add symlink for /usr/sbin/update-grub for scripts using the absolute
-    path
-
- -- Tobias Heider <me@tobhe.de>  Wed, 07 Sep 2022 18:11:04 +0200
-
-asahi-scripts (20220821-2) jammy; urgency=medium
-
-  * Add dpkg-divert for update-grub from grub2-common
-
- -- Tobias Heider <me@tobhe.de>  Wed, 07 Sep 2022 17:29:54 +0200
-
-asahi-scripts (20220821-1) jammy; urgency=medium
-
-  * Add update-grub
-
- -- Tobias Heider <me@tobhe.de>  Wed, 07 Sep 2022 16:40:26 +0200
-
-asahi-scripts (20220821) jammy; urgency=medium
-
-  * Initial release 
-
- -- Tobias Heider <me@tobhe.de>  Wed, 07 Sep 2022 14:18:38 +0200
+ -- Tobias Heider <me@tobhe.de>  Tue, 14 Nov 2023 14:25:32 +0100

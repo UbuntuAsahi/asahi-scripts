@@ -10,11 +10,11 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
  Makefile                            | 15 ++++++++-
  functions.sh                        |  4 +--
  initramfs/hooks/asahi               | 35 +++++++++++++++++++++
- initramfs/kernel/zz-update-m1n1     | 21 +++++++++++++
- initramfs/modules                   | 33 ++++++++++++++++++++
+ initramfs/kernel/zz-update-m1n1     | 26 ++++++++++++++++
+ initramfs/modules                   | 34 ++++++++++++++++++++
  initramfs/scripts/init-bottom/asahi | 19 ++++++++++++
- initramfs/scripts/init-top/asahi    | 61 +++++++++++++++++++++++++++++++++++++
- 7 files changed, 185 insertions(+), 3 deletions(-)
+ initramfs/scripts/init-top/asahi    | 62 +++++++++++++++++++++++++++++++++++++
+ 7 files changed, 192 insertions(+), 3 deletions(-)
  create mode 100644 initramfs/hooks/asahi
  create mode 100644 initramfs/kernel/zz-update-m1n1
  create mode 100644 initramfs/modules
@@ -119,14 +119,19 @@ index 0000000..93df811
 +add_modules_from_file /usr/share/asahi-scripts/modules
 diff --git a/initramfs/kernel/zz-update-m1n1 b/initramfs/kernel/zz-update-m1n1
 new file mode 100644
-index 0000000..1cdac6a
+index 0000000..f5853c3
 --- /dev/null
 +++ b/initramfs/kernel/zz-update-m1n1
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,26 @@
 +#! /bin/sh
 +set -e
 +
 +which update-m1n1 >/dev/null 2>&1 || exit 0
++
++if [ ! -e /usr/lib/m1n1/m1n1.bin ] && [ -e /usr/lib/m1n1/boot.bin ]; then
++	# looks like glanzmanns m1n1 package, not debians.
++	exit 0
++fi
 +
 +set -- $DEB_MAINT_PARAMS
 +mode="${1#\'}"
@@ -146,10 +151,10 @@ index 0000000..1cdac6a
 +exit 0
 diff --git a/initramfs/modules b/initramfs/modules
 new file mode 100644
-index 0000000..19ac8ae
+index 0000000..b4cb231
 --- /dev/null
 +++ b/initramfs/modules
-@@ -0,0 +1,33 @@
+@@ -0,0 +1,34 @@
 +# For NVMe & SMC
 +apple-mailbox
 +# For NVMe
@@ -168,6 +173,7 @@ index 0000000..19ac8ae
 +nvmem-apple-efuses
 +phy-apple-atc
 +xhci-pci
++xhci-plat-hcd
 +pcie-apple
 +gpio_macsmc
 +# For HID
@@ -210,10 +216,10 @@ index 0000000..c198e8b
 +cp -r /vendorfw/* /vendorfw/.vendorfw.manifest "${rootmnt}"/lib/firmware/vendor
 diff --git a/initramfs/scripts/init-top/asahi b/initramfs/scripts/init-top/asahi
 new file mode 100644
-index 0000000..79d0af4
+index 0000000..f650ce5
 --- /dev/null
 +++ b/initramfs/scripts/init-top/asahi
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,62 @@
 +#!/bin/sh
 +
 +PREREQ="udev"
@@ -244,6 +250,7 @@ index 0000000..79d0af4
 +log_success_msg "Load NVME modules"
 +modprobe apple-mailbox
 +modprobe nvme-apple
++modprobe xhci-plat-hcd
 +
 +for i in $(seq 0 50); do
 +[ -e /sys/bus/platform/drivers/nvme-apple/*.nvme/nvme/nvme*/nvme*n1/ ] && break

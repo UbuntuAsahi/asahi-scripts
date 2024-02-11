@@ -1,17 +1,18 @@
 Source: asahi-scripts
-Section: misc
+Section: admin
 Priority: optional
 Maintainer: Tobias Heider <me@tobhe.de>
 Build-Depends: debhelper-compat (= 13)
-Standards-Version: 4.6.0
+Standards-Version: 4.6.2
 Homepage: https://github.com/AsahiLinux/asahi-scripts
-Vcs-Git: https://github.com/tobhe/asahi-scripts -b ubuntu/jammy
+Vcs-Browser: https://github.com/ubuntuasahi/asahi-scripts
+Vcs-Git: https://github.com/ubuntuasahi/asahi-scripts.git
 Rules-Requires-Root: no
 
 Package: asahi-scripts
-Architecture: any
+Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Asahi Linux maintenance scripts
- This package contains miscellaneous admin scripts for the Asahi Linux
+ This package contains miscellaneous admin scripts from the Asahi Linux
  reference distro.
