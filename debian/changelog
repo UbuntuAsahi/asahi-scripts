@@ -1,3 +1,10 @@
+asahi-scripts (20231219.1-1ubuntu1) mantic; urgency=medium
+
+  * d/p/0004-UBUNTU-adjust-dtb-path-for-ubuntu.patch:
+    - Lookup Ubuntu device-trees in /lib/firmware/*/device-tree/apple
+
+ -- Tobias Heider <me@tobhe.de>  Sun, 11 Feb 2024 18:50:00 +0100
+
 asahi-scripts (20231219.1-1) unstable; urgency=medium
 
   * New upstream release 20231219.1
