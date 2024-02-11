@@ -1,11 +1,12 @@
 asahi-scripts (20231219.1-1) unstable; urgency=medium
 
   * New upstream release 20231219.1
-  * Rebase Adjust-update-m1n1-paths-for-debian.patch onto 20231219.1
-    - adopt upstream approach for multiple kernels
-    - make glob more permissive to allow other kernel name variations
+  * Rebase patches onto 20231219.1
+    - update-m1n1: adopt upstream approach for multiple kernels
+    - update-m1n1: make dtb glob more permissive for alternative names
+    - initramfs: explicitly load xhci-plat-hcd
 
- -- Tobias Heider <me@tobhe.de>  Sun, 11 Feb 2024 01:09:53 +0100
+ -- Tobias Heider <me@tobhe.de>  Sun, 11 Feb 2024 01:35:07 +0100
 
 asahi-scripts (20230821-3) unstable; urgency=medium
 
