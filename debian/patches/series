@@ -2,3 +2,4 @@
 0002-debian-Adjust-update-m1n1-paths-for-debian.patch
 0003-debian-Add-initramfs-tools-implementation-for-cpio-f.patch
 0004-debian-Support-asahi-diagnose.patch
+0005-UBUNTU-adjust-dtb-path-for-ubuntu.patch
