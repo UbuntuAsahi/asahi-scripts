@@ -1,0 +1,21 @@
+From: Tobias Heider <me@tobhe.de>
+Date: Thu, 27 Jun 2024 15:00:26 +0200
+Subject: UBUNTU: adjust dtb path for ubuntu
+
+---
+ update-m1n1 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/update-m1n1 b/update-m1n1
+index ea13945..a792647 100755
+--- a/update-m1n1
++++ b/update-m1n1
+@@ -16,7 +16,7 @@ fi
+ : ${M1N1:="/usr/lib/m1n1/m1n1.bin"}
+ : ${U_BOOT:="/usr/lib/u-boot-asahi/u-boot-nodtb.bin"}
+ : ${TARGET:="$1"}
+-: ${DTBS:=$(/bin/ls -d /usr/lib/linux-image-*asahi*/apple | sort -rV | head -1)/*.dtb}
++: ${DTBS:=$(/bin/ls -d /lib/firmware/*/device-tree/apple | sort -rV | head -1)/*.dtb}
+ : ${CONFIG:=/etc/m1n1.conf}
+ 
+ umount=false
