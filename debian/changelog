@@ -1,3 +1,11 @@
+asahi-scripts (20240623-1) unstable; urgency=medium
+
+  * New upstream release 20240623
+  * d/p/0003-debian-Add-initramfs-tools-implementation-for-cpio-f.patch:
+    - sync with latest dracut changes
+
+ -- Tobias Heider <me@tobhe.de>  Thu, 27 Jun 2024 14:36:06 +0200
+
 asahi-scripts (20231219.1-1) unstable; urgency=medium
 
   * New upstream release 20231219.1
