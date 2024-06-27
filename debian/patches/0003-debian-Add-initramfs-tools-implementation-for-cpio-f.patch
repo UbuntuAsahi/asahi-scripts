@@ -9,12 +9,12 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
 ---
  Makefile                            | 15 ++++++++-
  functions.sh                        |  4 +--
- initramfs/hooks/asahi               | 35 +++++++++++++++++++++
+ initramfs/hooks/asahi               | 39 ++++++++++++++++++++++++
  initramfs/kernel/zz-update-m1n1     | 26 ++++++++++++++++
- initramfs/modules                   | 34 ++++++++++++++++++++
+ initramfs/modules                   | 40 ++++++++++++++++++++++++
  initramfs/scripts/init-bottom/asahi | 19 ++++++++++++
- initramfs/scripts/init-top/asahi    | 62 +++++++++++++++++++++++++++++++++++++
- 7 files changed, 192 insertions(+), 3 deletions(-)
+ initramfs/scripts/init-top/asahi    | 61 +++++++++++++++++++++++++++++++++++++
+ 7 files changed, 201 insertions(+), 3 deletions(-)
  create mode 100644 initramfs/hooks/asahi
  create mode 100644 initramfs/kernel/zz-update-m1n1
  create mode 100644 initramfs/modules
@@ -22,10 +22,10 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
  create mode 100644 initramfs/scripts/init-top/asahi
 
 diff --git a/Makefile b/Makefile
-index 1ab3d1c..34bb217 100644
+index 81c2ffd..8bdfcb7 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -44,6 +44,19 @@ install-dracut: install
+@@ -46,6 +46,19 @@ install-dracut: install
  	install -m0755 -t $(DESTDIR)$(DRACUT_MODULES_DIR)/99asahi-firmware dracut/modules.d/99asahi-firmware/load-asahi-firmware.sh
  	install -m0755 -t $(DESTDIR)$(DRACUT_MODULES_DIR)/99asahi-firmware dracut/modules.d/99asahi-firmware/module-setup.sh
  
@@ -45,7 +45,7 @@ index 1ab3d1c..34bb217 100644
  install-arch: install install-mkinitcpio
  	install -m0755 -t $(DESTDIR)$(BIN_DIR)/ $(BUILD_ARCH_SCRIPTS)
  	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system
-@@ -56,7 +69,7 @@ install-arch: install install-mkinitcpio
+@@ -58,7 +71,7 @@ install-arch: install install-mkinitcpio
  
  install-fedora: install install-dracut
  
@@ -55,7 +55,7 @@ index 1ab3d1c..34bb217 100644
  uninstall:
  	rm -f $(addprefix $(DESTDIR)$(BIN_DIR)/,$(SCRIPTS))
 diff --git a/functions.sh b/functions.sh
-index df3a6ea..08ce2c7 100644
+index fd400ff..ccb3ed2 100644
 --- a/functions.sh
 +++ b/functions.sh
 @@ -43,7 +43,7 @@ mount_sys_esp() {
@@ -78,10 +78,10 @@ index df3a6ea..08ce2c7 100644
  }
 diff --git a/initramfs/hooks/asahi b/initramfs/hooks/asahi
 new file mode 100644
-index 0000000..93df811
+index 0000000..34022d0
 --- /dev/null
 +++ b/initramfs/hooks/asahi
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,39 @@
 +#!/bin/sh
 +
 +PREREQ=""
@@ -107,11 +107,15 @@ index 0000000..93df811
 +cp -r /usr/share/asahi-scripts/* "${DESTDIR}/usr/share/asahi-scripts"
 +
 +# Debian
-+copy_exec /usr/bin/seq
-+copy_exec /usr/bin/sed
-+copy_exec /usr/bin/grep
-+copy_exec /usr/bin/cp
 +copy_exec /usr/bin/cpio
++copy_exec /usr/bin/cut
++copy_exec /usr/bin/dirname
++copy_exec /usr/bin/grep
++copy_exec /usr/bin/mkdir
++copy_exec /usr/bin/modprobe
++copy_exec /usr/bin/seq
++copy_exec /usr/bin/sleep
++
 +manual_add_modules vfat
 +manual_add_modules nls_ascii
 +manual_add_modules nls_cp437
@@ -151,10 +155,10 @@ index 0000000..f5853c3
 +exit 0
 diff --git a/initramfs/modules b/initramfs/modules
 new file mode 100644
-index 0000000..b4cb231
+index 0000000..0fe204f
 --- /dev/null
 +++ b/initramfs/modules
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,40 @@
 +# For NVMe & SMC
 +apple-mailbox
 +# For NVMe
@@ -166,6 +170,7 @@ index 0000000..b4cb231
 +macsmc-rtkit
 +# For USB
 +i2c-apple
++i2c-pasemi-platform
 +tps6598x
 +apple-dart
 +dwc3
@@ -189,6 +194,11 @@ index 0000000..b4cb231
 +apple-dockchannel
 +dockchannel-hid
 +apple-rtkit-helper
++# For DP / HDMI audio
++apple-sio
++# For DPTX and HDMI displays
++mux-apple-display-crossbar
++phy-apple-dptx
 diff --git a/initramfs/scripts/init-bottom/asahi b/initramfs/scripts/init-bottom/asahi
 new file mode 100644
 index 0000000..c198e8b
@@ -216,10 +226,10 @@ index 0000000..c198e8b
 +cp -r /vendorfw/* /vendorfw/.vendorfw.manifest "${rootmnt}"/lib/firmware/vendor
 diff --git a/initramfs/scripts/init-top/asahi b/initramfs/scripts/init-top/asahi
 new file mode 100644
-index 0000000..f650ce5
+index 0000000..2044e32
 --- /dev/null
 +++ b/initramfs/scripts/init-top/asahi
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,61 @@
 +#!/bin/sh
 +
 +PREREQ="udev"
@@ -263,7 +273,6 @@ index 0000000..f650ce5
 +fi
 +
 +# If the above exists, hopefully the /dev device exists and this will work
-+
 +VENDORFW="/run/.system-efi/vendorfw/"
 +
 +(
