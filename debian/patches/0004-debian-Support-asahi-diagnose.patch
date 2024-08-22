@@ -1,0 +1,22 @@
+--- a/asahi-diagnose
++++ b/asahi-diagnose
+@@ -169,13 +169,18 @@
+             fedora-asahi-remix-scripts tiny-dfr uboot-images-armv8 kernel-16k
+             kernel-16k-modules-extra asahi-fwextract dracut-asahi update-m1n1
+             asahi-audio speakersafetyd wireplumber pipewire mesa"
++    elif [ -e /etc/debian_version ]; then
++      cmd="dpkg -l"
++      pkgs="m1n1 alsa-ucm-conf-asahi tiny-dfr u-boot-asahi linux-image-*asahi*
++            asahi-fwextract asahi-audio speakersafetyd wireplumber pipewire
++            lib*mesa*"
+     else
+       echo "Distribution not supported"
+       return
+     fi
+     cat <<EOF
+ \`\`\`
+-$($cmd $pkgs 2>/dev/null | sort -u)
++$($cmd $pkgs 2>/dev/null | grep '^ii' | sort -u)
+ \`\`\`
+ 
+ EOF
