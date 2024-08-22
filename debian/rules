@@ -2,8 +2,11 @@
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
+DESTDIR=debian/asahi-scripts
+
 %:
 	dh $@
 
 override_dh_auto_install:
-	$(MAKE) install-debian DESTDIR=debian/asahi-scripts
+	$(MAKE) install-debian DESTDIR=$(DESTDIR)
+	chmod 644 $(DESTDIR)/usr/lib/systemd/system/* $(DESTDIR)/usr/lib/udev/rules.d/*
