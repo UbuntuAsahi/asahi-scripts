@@ -1,3 +1,17 @@
+asahi-scripts (20240822-1) UNRELEASED; urgency=medium
+
+  * New upstream release 20240822
+  * Team upload
+  * d/p/0001-debian-add-install-debian-target.patch: add install-macsmc-battery
+    target to install-debian
+  * d/p/0003-debian-Add-initramfs-tools-implementation-for-cpio-f.patch: refresh
+  * d/p/0004-debian-Support-asahi-diagnose.patch: support Debian in
+    asahi-diagnose
+  * d/rules: fix permissions of macsmc-battery systemd and udev files
+  * d/asahi-scripts.postinst: add udev trigger for macsmc-battery-charge-control
+
+ -- NoisyCoil <noisycoil@tutanota.com>  Thu, 22 Aug 2024 17:12:41 +0200
+
 asahi-scripts (20240623-1) unstable; urgency=medium
 
   * New upstream release 20240623
