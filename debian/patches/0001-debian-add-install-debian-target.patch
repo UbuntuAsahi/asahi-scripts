@@ -8,6 +8,8 @@ new install-boot target. Only install what is needed on Ubuntu.
  Makefile | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/Makefile b/Makefile
+index 713e6e6..c872a1a 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,4 +1,4 @@
@@ -16,7 +18,7 @@ new install-boot target. Only install what is needed on Ubuntu.
  SYS_PREFIX=$(PREFIX)
  CONFIG_DIR=/etc/default
  BIN_DIR=$(PREFIX)/bin
-@@ -67,6 +67,8 @@
+@@ -67,6 +67,8 @@ install-arch: install install-mkinitcpio
  
  install-fedora: install install-dracut install-macsmc-battery
  

@@ -21,9 +21,11 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
  create mode 100644 initramfs/scripts/init-bottom/asahi
  create mode 100644 initramfs/scripts/init-top/asahi
 
+diff --git a/Makefile b/Makefile
+index c872a1a..12b97d2 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -55,6 +55,19 @@
+@@ -55,6 +55,19 @@ install-macsmc-battery: install
  	install -m0755 -t $(DESTDIR)$(SYSTEMD_UNIT_DIR) macsmc-battery/systemd/macsmc-battery-charge-control-end-threshold.service
  	install -m0755 -t $(DESTDIR)$(UDEV_RULES_DIR) macsmc-battery/udev/93-macsmc-battery-charge-control.rules
  
@@ -43,7 +45,7 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
  install-arch: install install-mkinitcpio
  	install -m0755 -t $(DESTDIR)$(BIN_DIR)/ $(BUILD_ARCH_SCRIPTS)
  	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system
-@@ -67,7 +80,7 @@
+@@ -67,7 +80,7 @@ install-arch: install install-mkinitcpio
  
  install-fedora: install install-dracut install-macsmc-battery
  
@@ -52,9 +54,11 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
  
  uninstall:
  	rm -f $(addprefix $(DESTDIR)$(BIN_DIR)/,$(SCRIPTS))
+diff --git a/functions.sh b/functions.sh
+index fd400ff..ccb3ed2 100644
 --- a/functions.sh
 +++ b/functions.sh
-@@ -43,7 +43,7 @@
+@@ -43,7 +43,7 @@ mount_sys_esp() {
          mount --bind "$bootmnt" "$mountpoint"
          warn "System ESP not identified in device tree, using $bootmnt"
      else
@@ -63,7 +67,7 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
      fi
      dev="$(grep "$mountpoint" /proc/mounts | cut -d" " -f1)"
      info "Mounted System ESP $dev at $mountpoint"
-@@ -72,7 +72,7 @@
+@@ -72,7 +72,7 @@ mount_boot_esp() {
              return 1
          fi
  
@@ -72,6 +76,9 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
      fi
      info "Mounted Boot ESP at $mountpoint"
  }
+diff --git a/initramfs/hooks/asahi b/initramfs/hooks/asahi
+new file mode 100644
+index 0000000..34022d0
 --- /dev/null
 +++ b/initramfs/hooks/asahi
 @@ -0,0 +1,39 @@
@@ -114,6 +121,9 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
 +manual_add_modules nls_cp437
 +
 +add_modules_from_file /usr/share/asahi-scripts/modules
+diff --git a/initramfs/kernel/zz-update-m1n1 b/initramfs/kernel/zz-update-m1n1
+new file mode 100644
+index 0000000..f5853c3
 --- /dev/null
 +++ b/initramfs/kernel/zz-update-m1n1
 @@ -0,0 +1,26 @@
@@ -143,6 +153,9 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
 +esac
 +
 +exit 0
+diff --git a/initramfs/modules b/initramfs/modules
+new file mode 100644
+index 0000000..0fe204f
 --- /dev/null
 +++ b/initramfs/modules
 @@ -0,0 +1,40 @@
@@ -186,6 +199,9 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
 +# For DPTX and HDMI displays
 +mux-apple-display-crossbar
 +phy-apple-dptx
+diff --git a/initramfs/scripts/init-bottom/asahi b/initramfs/scripts/init-bottom/asahi
+new file mode 100644
+index 0000000..c198e8b
 --- /dev/null
 +++ b/initramfs/scripts/init-bottom/asahi
 @@ -0,0 +1,19 @@
@@ -208,6 +224,9 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
 +
 +mount -t tmpfs -o mode=0755 vendorfw "${rootmnt}"/lib/firmware/vendor
 +cp -r /vendorfw/* /vendorfw/.vendorfw.manifest "${rootmnt}"/lib/firmware/vendor
+diff --git a/initramfs/scripts/init-top/asahi b/initramfs/scripts/init-top/asahi
+new file mode 100644
+index 0000000..2044e32
 --- /dev/null
 +++ b/initramfs/scripts/init-top/asahi
 @@ -0,0 +1,61 @@
