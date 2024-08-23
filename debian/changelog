@@ -1,7 +1,6 @@
-asahi-scripts (20240822-1) UNRELEASED; urgency=medium
+asahi-scripts (20240822-1) unstable; urgency=medium
 
   * New upstream release 20240822
-  * Team upload
   * d/p/0001-debian-add-install-debian-target.patch: add install-macsmc-battery
     target to install-debian
   * d/p/0003-debian-Add-initramfs-tools-implementation-for-cpio-f.patch: refresh
