@@ -1,0 +1,3 @@
+remove-on-upgrade /etc/initramfs-tools/hooks/asahi
+remove-on-upgrade /etc/initramfs-tools/scripts/init-bottom/asahi
+remove-on-upgrade /etc/initramfs-tools/scripts/init-top/asahi
