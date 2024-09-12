@@ -22,7 +22,7 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
  create mode 100644 initramfs/scripts/init-top/asahi
 
 diff --git a/Makefile b/Makefile
-index c872a1a..12b97d2 100644
+index c872a1a..5db3d56 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -55,6 +55,19 @@ install-macsmc-battery: install
@@ -34,12 +34,12 @@ index c872a1a..12b97d2 100644
 +	install -m0755 -t $(DESTDIR)/etc/kernel/postinst.d/ initramfs/kernel/zz-update-m1n1
 +	install -d $(DESTDIR)/etc/kernel/postrm.d/
 +	install -m0755 -t $(DESTDIR)/etc/kernel/postrm.d/ initramfs/kernel/zz-update-m1n1
-+	install -d $(DESTDIR)/etc/initramfs-tools/hooks/
-+	install -m0755 -t $(DESTDIR)/etc/initramfs-tools/hooks/ initramfs/hooks/asahi
-+	install -d $(DESTDIR)/etc/initramfs-tools/scripts/init-top
-+	install -m0755 -t $(DESTDIR)/etc/initramfs-tools/scripts/init-top initramfs/scripts/init-top/asahi
-+	install -d $(DESTDIR)/etc/initramfs-tools/scripts/init-bottom
-+	install -m0755 -t $(DESTDIR)/etc/initramfs-tools/scripts/init-bottom initramfs/scripts/init-bottom/asahi
++	install -d $(DESTDIR)$(PREFIX)/share/initramfs-tools/hooks/
++	install -m0755 -t $(DESTDIR)$(PREFIX)/share/initramfs-tools/hooks/ initramfs/hooks/asahi
++	install -d $(DESTDIR)$(PREFIX)/share/initramfs-tools/scripts/init-top
++	install -m0755 -t $(DESTDIR)$(PREFIX)/share/initramfs-tools/scripts/init-top initramfs/scripts/init-top/asahi
++	install -d $(DESTDIR)$(PREFIX)/share/initramfs-tools/scripts/init-bottom
++	install -m0755 -t $(DESTDIR)$(PREFIX)/share/initramfs-tools/scripts/init-bottom initramfs/scripts/init-bottom/asahi
 +	install -m0644 -t $(DESTDIR)$(PREFIX)/share/asahi-scripts initramfs/modules
 +
  install-arch: install install-mkinitcpio
