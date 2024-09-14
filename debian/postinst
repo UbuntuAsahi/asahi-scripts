@@ -11,9 +11,6 @@ case "${1}" in
 				udevadm trigger --action=change --subsystem-match=power_supply || true
 			fi
 		fi
-		if which update-initramfs >/dev/null 2>&1; then
-			update-initramfs -u -k all
-		fi
 		;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
