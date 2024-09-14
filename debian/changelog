@@ -1,3 +1,9 @@
+asahi-scripts (20240822-2) UNRELEASED; urgency=medium
+
+  * d/postinst: do not call update-initramfs (replaced by automatic trigger)
+
+ -- NoisyCoil <noisycoil@tutanota.com>  Sun, 15 Sep 2024 00:19:48 +0200
+
 asahi-scripts (20240822-2~exp1) experimental; urgency=medium
 
   * d/patches/0003-*: install initramfs-tools files in /usr/share
