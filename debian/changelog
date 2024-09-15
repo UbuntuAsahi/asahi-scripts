@@ -1,3 +1,10 @@
+asahi-scripts (20240822-2ubuntu1~asahi1) noble; urgency=medium
+
+  * d/p/0004-UBUNTU-adjust-dtb-path-for-ubuntu.patch:
+    - adjust dtb path for Ubuntu
+
+ -- Tobias Heider <me@tobhe.de>  Sun, 15 Sep 2024 16:04:28 +0200
+
 asahi-scripts (20240822-2) unstable; urgency=medium
 
   * d/postinst: do not call update-initramfs (replaced by automatic trigger)
