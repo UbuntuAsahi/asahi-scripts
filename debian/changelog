@@ -1,3 +1,10 @@
+asahi-scripts (20240822-3) UNRELEASED; urgency=medium
+
+  * d/p/0004-debian-Support-asahi-diagnose.patch: make asahi-diagnose
+    detect the asahi-platform* and ubuntu-asahi packages
+
+ -- NoisyCoil <noisycoil@tutanota.com>  Tue, 14 Jan 2025 01:50:49 +0100
+
 asahi-scripts (20240822-2) unstable; urgency=medium
 
   * d/postinst: do not call update-initramfs (replaced by automatic trigger)
