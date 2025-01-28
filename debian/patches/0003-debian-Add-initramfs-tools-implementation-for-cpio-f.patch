@@ -201,7 +201,7 @@ index 0000000..0fe204f
 +phy-apple-dptx
 diff --git a/initramfs/scripts/init-bottom/asahi b/initramfs/scripts/init-bottom/asahi
 new file mode 100644
-index 0000000..c198e8b
+index 0000000..cac593b
 --- /dev/null
 +++ b/initramfs/scripts/init-bottom/asahi
 @@ -0,0 +1,19 @@
@@ -223,7 +223,7 @@ index 0000000..c198e8b
 +. /scripts/functions
 +
 +mount -t tmpfs -o mode=0755 vendorfw "${rootmnt}"/lib/firmware/vendor
-+cp -r /vendorfw/* /vendorfw/.vendorfw.manifest "${rootmnt}"/lib/firmware/vendor
++cp -a /vendorfw/* /vendorfw/.vendorfw.manifest "${rootmnt}"/lib/firmware/vendor
 diff --git a/initramfs/scripts/init-top/asahi b/initramfs/scripts/init-top/asahi
 new file mode 100644
 index 0000000..2044e32
