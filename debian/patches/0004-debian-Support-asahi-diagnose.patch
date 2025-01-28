@@ -1,13 +1,13 @@
 From: Noisy Coil <noisycoil@tutanota.com>
 Date: Thu, 22 Aug 2024 15:56:37 +0200
-Subject: debian-Support-asahi-diagnose
+Subject: debian: Support asahi-diagnose
 
 ---
  asahi-diagnose | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/asahi-diagnose b/asahi-diagnose
-index 5062387..d11bae7 100755
+index 5062387..83b99dd 100755
 --- a/asahi-diagnose
 +++ b/asahi-diagnose
 @@ -169,13 +169,18 @@ package_versions() {

@@ -3,11 +3,11 @@ Date: Sun, 12 Feb 2023 01:23:08 +0100
 Subject: debian: Adjust update-m1n1 paths for debian.
 
 ---
- update-m1n1 | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ update-m1n1 | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/update-m1n1 b/update-m1n1
-index 0e55ead..ea13945 100755
+index 9dd745c..ea13945 100755
 --- a/update-m1n1
 +++ b/update-m1n1
 @@ -1,4 +1,4 @@
@@ -16,7 +16,7 @@ index 0e55ead..ea13945 100755
  # SPDX-License-Identifier: MIT
  
  set -e
-@@ -13,11 +13,10 @@ else
+@@ -13,17 +13,12 @@ else
      . /usr/share/asahi-scripts/functions.sh
  fi
  
@@ -26,8 +26,14 @@ index 0e55ead..ea13945 100755
 +: ${M1N1:="/usr/lib/m1n1/m1n1.bin"}
 +: ${U_BOOT:="/usr/lib/u-boot-asahi/u-boot-nodtb.bin"}
  : ${TARGET:="$1"}
--: ${DTBS:=$(/bin/ls -d /lib/modules/*-ARCH | sort -rV | head -1)/dtbs/*.dtb}
 +: ${DTBS:=$(/bin/ls -d /usr/lib/linux-image-*asahi*/apple | sort -rV | head -1)/*.dtb}
  : ${CONFIG:=/etc/m1n1.conf}
  
+-if [ -z "$DTBS" ]; then
+-    warn "ERROR: DTBS config unset or empty, see `/etc/default/update-m1n1`"
+-    exit 1
+-fi
+-
  umount=false
+ 
+ m1n1config=/run/m1n1.conf

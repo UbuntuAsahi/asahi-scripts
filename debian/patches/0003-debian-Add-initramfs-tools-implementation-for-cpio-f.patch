@@ -22,12 +22,12 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
  create mode 100644 initramfs/scripts/init-top/asahi
 
 diff --git a/Makefile b/Makefile
-index c872a1a..5db3d56 100644
+index 4154265..1c5d60d 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -55,6 +55,19 @@ install-macsmc-battery: install
  	install -m0755 -t $(DESTDIR)$(SYSTEMD_UNIT_DIR) macsmc-battery/systemd/macsmc-battery-charge-control-end-threshold.service
- 	install -m0755 -t $(DESTDIR)$(UDEV_RULES_DIR) macsmc-battery/udev/93-macsmc-battery-charge-control.rules
+ 	install -m0644 -t $(DESTDIR)$(UDEV_RULES_DIR) macsmc-battery/udev/93-macsmc-battery-charge-control.rules
  
 +install-initramfs: install
 +	install -d $(DESTDIR)/etc/kernel/postinst.d/
@@ -42,10 +42,10 @@ index c872a1a..5db3d56 100644
 +	install -m0755 -t $(DESTDIR)$(PREFIX)/share/initramfs-tools/scripts/init-bottom initramfs/scripts/init-bottom/asahi
 +	install -m0644 -t $(DESTDIR)$(PREFIX)/share/asahi-scripts initramfs/modules
 +
- install-arch: install install-mkinitcpio
+ install-arch: install install-mkinitcpio install-macsmc-battery
  	install -m0755 -t $(DESTDIR)$(BIN_DIR)/ $(BUILD_ARCH_SCRIPTS)
  	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system
-@@ -67,7 +80,7 @@ install-arch: install install-mkinitcpio
+@@ -67,7 +80,7 @@ install-arch: install install-mkinitcpio install-macsmc-battery
  
  install-fedora: install install-dracut install-macsmc-battery
  
@@ -201,7 +201,7 @@ index 0000000..0fe204f
 +phy-apple-dptx
 diff --git a/initramfs/scripts/init-bottom/asahi b/initramfs/scripts/init-bottom/asahi
 new file mode 100644
-index 0000000..c198e8b
+index 0000000..cac593b
 --- /dev/null
 +++ b/initramfs/scripts/init-bottom/asahi
 @@ -0,0 +1,19 @@
@@ -223,7 +223,7 @@ index 0000000..c198e8b
 +. /scripts/functions
 +
 +mount -t tmpfs -o mode=0755 vendorfw "${rootmnt}"/lib/firmware/vendor
-+cp -r /vendorfw/* /vendorfw/.vendorfw.manifest "${rootmnt}"/lib/firmware/vendor
++cp -a /vendorfw/* /vendorfw/.vendorfw.manifest "${rootmnt}"/lib/firmware/vendor
 diff --git a/initramfs/scripts/init-top/asahi b/initramfs/scripts/init-top/asahi
 new file mode 100644
 index 0000000..2044e32

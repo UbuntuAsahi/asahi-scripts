@@ -1,9 +1,12 @@
-asahi-scripts (20240822-3) UNRELEASED; urgency=medium
+asahi-scripts (20250128-1) UNRELEASED; urgency=medium
 
-  * d/p/0004-debian-Support-asahi-diagnose.patch: make asahi-diagnose
-    detect the asahi-platform* and ubuntu-asahi packages
+  * d/p/0004-debian-Support-asahi-diagnose.patch:
+    - make asahi-diagnose detect asahi-platform* and ubuntu-asahi
+    - improve patch title
+  * d/patches: refresh
+  * initramfs: port latest dracut changes to initramfs
 
- -- NoisyCoil <noisycoil@tutanota.com>  Tue, 14 Jan 2025 01:50:49 +0100
+ -- NoisyCoil <noisycoil@tutanota.com>  Tue, 28 Jan 2025 17:08:52 +0100
 
 asahi-scripts (20240822-2) unstable; urgency=medium
 
