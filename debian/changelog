@@ -1,12 +1,17 @@
-asahi-scripts (20250128-1) UNRELEASED; urgency=medium
+asahi-scripts (20250130-1) unstable; urgency=medium
 
+  [ Tobias Heider ]
+  * New upstream release 20250130
+  * Remove m1n1.conf
+
+  [ NoisyCoil ]
   * d/p/0004-debian-Support-asahi-diagnose.patch:
     - make asahi-diagnose detect asahi-platform* and ubuntu-asahi
     - improve patch title
   * d/patches: refresh
   * initramfs: port latest dracut changes to initramfs
 
- -- NoisyCoil <noisycoil@tutanota.com>  Tue, 28 Jan 2025 17:08:52 +0100
+ -- Tobias Heider <me@tobhe.de>  Sat, 01 Feb 2025 12:58:34 +0100
 
 asahi-scripts (20240822-2) unstable; urgency=medium
 
