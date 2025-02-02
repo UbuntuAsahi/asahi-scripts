@@ -1,3 +1,9 @@
+asahi-scripts (20250130-1ubuntu1~asahi1.24.04) noble; urgency=medium
+
+  * UBUNTU: adjust dtb path for Ubuntu
+
+ -- Tobias Heider <me@tobhe.de>  Sun, 02 Feb 2025 12:41:47 +0100
+
 asahi-scripts (20250130-1) unstable; urgency=medium
 
   [ Tobias Heider ]
