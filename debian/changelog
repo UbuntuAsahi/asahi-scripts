@@ -1,3 +1,12 @@
+asahi-scripts (20250130-2) unstable; urgency=medium
+
+  [ NoisyCoil ]
+  * d/p/0004-*-asahi-diagnose.patch: make asahi-diagnose detect triforce-lv2, ...
+  * Add the update-m1n1 triggers
+  * Use debian's u-boot as primary, others as fallback
+
+ -- Tobias Heider <me@tobhe.de>  Mon, 10 Mar 2025 00:36:24 +0100
+
 asahi-scripts (20250130-1) unstable; urgency=medium
 
   [ Tobias Heider ]
