@@ -22,10 +22,10 @@ Subject: debian: Add initramfs-tools implementation for cpio firmware loading
  create mode 100644 initramfs/scripts/init-top/asahi
 
 diff --git a/Makefile b/Makefile
-index 4154265..1c5d60d 100644
+index aca6667..3d9b04e 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -55,6 +55,19 @@ install-macsmc-battery: install
+@@ -54,6 +54,19 @@ install-macsmc-battery: install
  	install -m0755 -t $(DESTDIR)$(SYSTEMD_UNIT_DIR) macsmc-battery/systemd/macsmc-battery-charge-control-end-threshold.service
  	install -m0644 -t $(DESTDIR)$(UDEV_RULES_DIR) macsmc-battery/udev/93-macsmc-battery-charge-control.rules
  
@@ -45,7 +45,7 @@ index 4154265..1c5d60d 100644
  install-arch: install install-mkinitcpio install-macsmc-battery
  	install -m0755 -t $(DESTDIR)$(BIN_DIR)/ $(BUILD_ARCH_SCRIPTS)
  	install -dD $(DESTDIR)$(PREFIX)/lib/systemd/system
-@@ -67,7 +80,7 @@ install-arch: install install-mkinitcpio install-macsmc-battery
+@@ -66,7 +79,7 @@ install-arch: install install-mkinitcpio install-macsmc-battery
  
  install-fedora: install install-dracut install-macsmc-battery
  
@@ -78,7 +78,7 @@ index fd400ff..ccb3ed2 100644
  }
 diff --git a/initramfs/hooks/asahi b/initramfs/hooks/asahi
 new file mode 100644
-index 0000000..34022d0
+index 0000000..dd44b59
 --- /dev/null
 +++ b/initramfs/hooks/asahi
 @@ -0,0 +1,39 @@
@@ -112,9 +112,9 @@ index 0000000..34022d0
 +copy_exec /usr/bin/dirname
 +copy_exec /usr/bin/grep
 +copy_exec /usr/bin/mkdir
-+copy_exec /usr/bin/modprobe
 +copy_exec /usr/bin/seq
 +copy_exec /usr/bin/sleep
++copy_exec /usr/sbin/modprobe
 +
 +manual_add_modules vfat
 +manual_add_modules nls_ascii
