@@ -1,3 +1,9 @@
+asahi-scripts (20250130-2ubuntu1.24.10) oracular; urgency=medium
+
+  * Build for Ubuntu 24.10
+
+ -- Tobias Heider <me@tobhe.de>  Thu, 27 Mar 2025 21:09:07 +0100
+
 asahi-scripts (20250130-2) unstable; urgency=medium
 
   [ NoisyCoil ]
