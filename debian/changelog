@@ -1,3 +1,10 @@
+asahi-scripts (20250130-2ubuntu3.24.04) noble; urgency=medium
+
+  * d/p/0005-UBUNTU-adjust-paths-for-ubuntu.patch:
+    - Adjust dtb and uboot paths for Ubuntu (LP: #2104922)
+
+ -- Tobias Heider <me@tobhe.de>  Fri, 28 Mar 2025 15:44:26 +0100
+
 asahi-scripts (20250130-2ubuntu2.24.04) noble; urgency=medium
 
   * Build for Ubuntu 24.04
