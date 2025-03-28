@@ -1,3 +1,9 @@
+asahi-scripts (20250130-2ubuntu4.24.10) oracular; urgency=medium
+
+  * Fix u-boot trigger path
+
+ -- Tobias Heider <me@tobhe.de>  Fri, 28 Mar 2025 22:30:18 +0100
+
 asahi-scripts (20250130-2ubuntu3.24.10) oracular; urgency=medium
 
   * d/p/0005-UBUNTU-adjust-paths-for-ubuntu.patch:
