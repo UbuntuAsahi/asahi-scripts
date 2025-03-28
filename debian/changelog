@@ -1,3 +1,10 @@
+asahi-scripts (20250130-2ubuntu3.24.10) oracular; urgency=medium
+
+  * d/p/0005-UBUNTU-adjust-paths-for-ubuntu.patch:
+    - Adjust dtb and uboot paths for Ubuntu (LP: #2104922)
+
+ -- Tobias Heider <me@tobhe.de>  Fri, 28 Mar 2025 15:33:21 +0100
+
 asahi-scripts (20250130-2ubuntu2.24.10) oracular; urgency=medium
 
   * Build for Ubuntu 24.10
